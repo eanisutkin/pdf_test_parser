@@ -40,6 +40,7 @@ if(!$toRead) {
 
 $table_found = false;
 $i = 0;
+$table_headers = Array();
 while( ($line = fgets($toRead)) !== false ) {
   if(!isset($res["Header"]["Name"]) && count($parts = preg_split("/\bName\b/", $line, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE)) == 2) {
     $res["Header"]["Name"] = trim($parts[1]);
@@ -71,7 +72,7 @@ while( ($line = fgets($toRead)) !== false ) {
     $table_found = true;
 
     foreach($parts as $part) {
-      $res["Table"]["$part"] = Array();
+      $table_headers["$part"] = 0;
     }
     continue;
   } else if(!$table_found) {
@@ -81,12 +82,12 @@ while( ($line = fgets($toRead)) !== false ) {
   } else if($table_found && $parts = preg_split("/\s{2,}/", $line, -1, PREG_SPLIT_NO_EMPTY)) {
     if(count($parts) == 14 || count($parts) == 15) {
       $j = 0;
-      foreach($res["Table"] as $key => $value) {
+      foreach($table_headers as $key => $value) {
         if(count($parts) == 14 && $key == "Reference") {
-          $res["Table"]["Reference"]["$i"] = "";
+          $res["Table"]["$i"]["Reference"] = "";
           continue;
         }
-        $res["Table"]["$key"]["$i"] = $parts[$j];
+        $res["Table"]["$i"]["$key"] = $parts[$j];
         $j++;
       }
       $i++;
