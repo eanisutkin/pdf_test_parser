@@ -22,6 +22,7 @@ $filename = $pathinfo["filename"];
 $read_path = $path."/".$filename.".txt";
 $result_path = "./json_encoded_result.txt";
 
+//Convert pdf to text using poppler-utils pdftotext, keeping the layout
 shell_exec("pdftotext -layout $filepath");
 if(!file_exists($read_path)) {
   echo "Something went wrong and the file conversion failed. Please try fileconversion outside this script with following command: pdftotext -layout [path to file]\n";
